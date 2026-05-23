@@ -20,7 +20,9 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import SolverEngine from './components/SolverEngine';
-import MetricsDashboard from './components/MetricsDashboard';
+// import MetricsDashboard from './components/MetricsDashboard';
+import { WorkloadChart, PerformanceMetrics } from './components/MetricsDashboard';
+
 import DataManager from './components/DataManager';
 import ResultsTable from './components/ResultsTable';
 import SettingsModal from './components/SettingsModal';
@@ -369,7 +371,7 @@ export default function App() {
         <ScrollArea className="flex-1">
           <div className="p-8 max-w-7xl mx-auto space-y-8">
             <AnimatePresence mode="wait">
-              {activeView === 'dashboard' && (
+              {/* {activeView === 'dashboard' && (
                 <motion.div 
                   key="dashboard"
                   initial={{ opacity: 0, y: 20 }}
@@ -390,7 +392,47 @@ export default function App() {
                     </div>
                   </div>
                 </motion.div>
-              )}
+              )} */}
+
+
+                {activeView === 'dashboard' && (
+                  <motion.div 
+                    key="dashboard"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-8"
+                  >
+                    {/* Bố cục lưới phân phối mới */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                      {/* Cột trái rộng (lg:col-span-2) chứa Solver Engine và Biểu đồ Workload kéo dài */}
+                      <div className="lg:col-span-2 space-y-8">
+                        <SolverEngine 
+                          isRunning={isSolverRunning} 
+                          progress={solverProgress} 
+                          logs={solverLogs} 
+                        />
+                        
+                        {/* Biểu đồ Workload được đặt tại đây để mở rộng tối đa trục hoành */}
+                        <WorkloadChart 
+                          hasResults={hasResults} 
+                          metrics={metrics} 
+                          assignments={assignments} 
+                          staff={staffData} 
+                        />
+                      </div>
+                      
+                      {/* Cột phải hẹp gọn gàng chứa thông số hiệu suất và trạng thái luật */}
+                      <div>
+                        <PerformanceMetrics 
+                          hasResults={hasResults} 
+                          metrics={metrics} 
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
 
               {activeView === 'data' && (
                 <motion.div 
